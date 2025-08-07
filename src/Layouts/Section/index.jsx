@@ -1,6 +1,3 @@
-// Bu dosyayı yeni Next.js projenizin src/Layouts/Section/ klasörüne yerleştirin.
-// İçeriği olduğu gibi kalacaktır.
-
 import Switch from '../../baseUI/Switch';
 
 const Section = ({title, children, ...props}) => {

@@ -6,8 +6,8 @@ const OnTvShowsPage = () => {
   return (
     <MediaListPage 
       mediaType="tv"
-      categoryTitle="On TV" // Sayfa başlığı
-      fetchPath={request.tvOnTheAir} // 'On TV' için doğru API yolu
+      categoryTitle="On TV" 
+      fetchPath={request.tvOnTheAir} 
     />
   );
 };

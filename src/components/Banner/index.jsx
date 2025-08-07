@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/router'; // useNavigate yerine useRouter kullanıyoruz
+import { useRouter } from 'next/router'; 
 import Container from '../../Layouts/Container';
 import SearchInput from '../../baseUI/Input/SearchInput';
 import SearchButton from '../../baseUI/Button/SearchButton';
 
-// API anahtarınızı Next.js ortam değişkeni formatına göre güncelliyoruz.
-// Client tarafında erişilebilir olması için NEXT_PUBLIC_ öneki kullanılır.
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY; 
 const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w1280';
@@ -16,7 +14,7 @@ const Banner = () => {
     const [error, setError] = useState(null);
 
     const searchInputRef = useRef();
-    const router = useRouter(); // useNavigate yerine useRouter kullanıyoruz
+    const router = useRouter(); 
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
@@ -27,7 +25,6 @@ const Banner = () => {
     const handleSearch = () => {
         const query = searchInputRef.current.value;
         if (query.trim()) {
-            // navigate yerine router.push kullanıyoruz
             router.push(`/search?query=${encodeURIComponent(query.trim())}`);
             searchInputRef.current.value = ''; 
         }
@@ -86,12 +83,8 @@ const Banner = () => {
         <div
             className="relative h-[250px] md:h-[300px] lg:h-[400px] bg-cover bg-center text-white"
             style={{
-                // Arka plan rengini daha şeffaf bir mavi tonu olarak ayarladık (opaklık 0.4).
-                backgroundColor: 'rgba(3, 37, 65, 0.9)', // Opaklık 0.4 olarak ayarlandı
-                // Arka plan resmini ekledik.
+                backgroundColor: 'rgba(3, 37, 65, 0.9)', 
                 backgroundImage: `url('${backgroundImageUrl}')`,
-                // Resim ile arka plan rengini karıştırmak için 'overlay' blend modunu kullandık.
-                // Bu, resmin daha görünür olmasını sağlarken mavi tonunu korur.
                 backgroundBlendMode: 'overlay', 
             }}
         >
@@ -104,7 +97,7 @@ const Banner = () => {
                         Millions of movies, TV shows, and people to discover. Explore now.
                     </h2>
 
-                    <div className="relative mt-20 max-w-8xl">
+                    <div className="relative mt-24 max-w-8xl">
                         <SearchInput ref={searchInputRef} onKeyDown={handleKeyDown} />
                         <div className="absolute top-0 right-0">
                             <SearchButton onClick={handleSearch} />

@@ -1,5 +1,3 @@
-// Bu dosya, navigasyon menünüzdeki öğeleri tanımlar.
-
 export const navItemsLeft = [
     {
         name: 'logo',
@@ -9,10 +7,10 @@ export const navItemsLeft = [
     {
         name: 'Movies',
         type: 'link', 
-        path: '/movies',
-        subItems: [ // Filmler için de alt öğe ekleyebiliriz, şimdilik boş bırakıyorum
+        path: '/movies', // General movies page
+        subItems: [
             { name: 'Popular', path: '/movies/popular' },
-            { name: 'Now Playing', path: '/movies/now-playing' },
+            { name: 'Now Playing', path: '/movies/now-playing' }, // Corresponds to "In Theaters" in request.jsx
             { name: 'Upcoming', path: '/movies/upcoming' },
             { name: 'Top Rated', path: '/movies/top-rated' }
         ]
@@ -20,11 +18,11 @@ export const navItemsLeft = [
     {
         name: 'TV Shows',
         type: 'link',
-        path: '/tv-shows', // Genel TV şovları sayfası
+        path: '/tv-shows', // General TV shows page
         subItems: [
             { name: 'Popular', path: '/tv-shows/popular' },
-            { name: 'Airing Today', path: '/tv-shows/airing-today' }, 
-            { name: 'On TV', path: '/tv-shows/on-the-air' }, // Yeni On TV sayfası
+            { name: 'Now Playing', path: '/tv-shows/now-playing' }, // On The Air yerine Now Playing
+            { name: 'Upcoming', path: '/tv-shows/upcoming' }, // Yeni Upcoming sayfası
             { name: 'Top Rated', path: '/tv-shows/top-rated' }
         ]
     },
@@ -36,7 +34,11 @@ export const navItemsLeft = [
     {
         name: 'More',
         type: 'link',
-        path: '/more'
+        path: '/more', // Genel "Daha Fazla" sayfası (isteğe bağlı)
+        subItems: [
+            { name: 'Watchlist', path: '/watchlist' }, // Yeni İzleme Listesi linki
+            { name: 'Watched', path: '/watched' } // Yeni İzlenenler linki
+        ]
     }
 ];
 

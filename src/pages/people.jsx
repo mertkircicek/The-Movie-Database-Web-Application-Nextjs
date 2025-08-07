@@ -68,7 +68,7 @@ const PeoplePage = () => {
               onClick={() => handlePersonClick(person.id)}
             >
               {person.profile_path ? (
-                <div className="relative w-full h-auto pb-[150%]"> {/* 2:3 oran için padding-bottom */}
+                <div className="relative w-full h-auto pb-[150%]"> 
                   <Image
                     src={`https://image.tmdb.org/t/p/w300${person.profile_path}`}
                     alt={person.name}

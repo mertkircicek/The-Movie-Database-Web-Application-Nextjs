@@ -1,6 +1,3 @@
-// Bu dosyayı yeni Next.js projenizin src/baseUI/Input/ klasörüne yerleştirin.
-// İçeriği olduğu gibi kalacaktır.
-
 import {forwardRef} from "react"
 
 const SearchInput = forwardRef((props,ref) => {

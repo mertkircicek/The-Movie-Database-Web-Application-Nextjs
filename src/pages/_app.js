@@ -1,20 +1,20 @@
 import React from 'react';
-// React Router DOM import'ları artık kullanılmayacak
+// React Router DOM importları Next.js'in sayfa tabanlı routing'i için kullanılmaz.
 // import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-// Next.js'te sayfalar dosya tabanlı routing ile yönetilir,
-// bu yüzden HomePage, MovieDetail vb. doğrudan burada import edilmez.
-// Onlar kendi pages dosyalarında import edilecek.
+// Sayfa bileşenleriniz (Bunlar doğrudan _app.jsx'te import edilmez, Next.js bunları otomatik olarak pages klasöründen yükler)
 // import HomePage from './components/HomePage';
 // import MovieDetail from './components/MovieDetail';
 // import TVDetail from './components/TVDetail';
 // import PersonDetail from './components/PersonDetail';
 // import SearchResultsPage from './components/SearchResultsPage'; 
 // import FavoritesPage from './components/FavoritesPage';
+// import WatchlistPage from './pages/watchlist'; 
+// import WatchedPage from './pages/watched';     
 
 // Layout ve Context'leri import ediyoruz
-import Layout from '../Layouts/Layout'; // Layout bileşeninizin yolu
-import { SearchProvider } from '../context/SearchContext'; 
+import Layout from '../Layouts/Layout'; // Layout bileşeninizin yolu düzeltildi
+import { SearchProvider } from '../context/SearchContext';
 import { FavoritesProvider } from '../context/FavoritesContext';
 import { Toaster } from 'react-hot-toast';
 
@@ -22,9 +22,9 @@ import { Toaster } from 'react-hot-toast';
 import '../styles/globals.css'; 
 
 // Next.js'te _app.js bileşeni, tüm sayfaları sarmalar
-function MyApp({ Component, pageProps }) {
+function App({ Component, pageProps }) { // Next.js, mevcut sayfa bileşenini Component prop'u olarak sağlar
     return (
-        // BrowserRouter artık kullanılmayacak
+        // BrowserRouter, Routes, Route artık kullanılmayacak
         <SearchProvider> 
             <FavoritesProvider>
                 <Toaster
@@ -48,4 +48,4 @@ function MyApp({ Component, pageProps }) {
     );
 }
 
-export default MyApp;
+export default App;

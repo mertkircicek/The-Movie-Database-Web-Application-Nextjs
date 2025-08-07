@@ -1,13 +1,11 @@
 import React from 'react';
-import { useRouter } from 'next/router'; // useParams ve useNavigate yerine useRouter kullanıyoruz
-import Image from 'next/image'; // Resim optimizasyonu için next/image kullanıyoruz
-import tmdb from '../../api/tmdb'; // Axios instance'ınız
+import { useRouter } from 'next/router'; 
+import Image from 'next/image'; 
+import tmdb from '../../api/tmdb'; 
 
-// Bu bileşen artık veriyi getServerSideProps'tan prop olarak alacak
 const TVDetail = ({ tvShow }) => {
-    const router = useRouter(); // Yönlendirme için useRouter kullanıyoruz
+    const router = useRouter(); 
 
-    // tvShow prop'u yoksa (örneğin getServerSideProps notFound döndürdüyse)
     if (!tvShow) {
         return (
             <div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -21,7 +19,7 @@ const TVDetail = ({ tvShow }) => {
             <div className="bg-tmdbDarkBlue p-4">
                 <div className="max-w-7xl mx-auto flex items-center">
                     <button
-                        onClick={() => router.back()} // navigate('/') yerine router.back() kullanıyoruz
+                        onClick={() => router.back()} 
                         className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-full transition-colors duration-200"
                     >
                         <svg
@@ -46,15 +44,14 @@ const TVDetail = ({ tvShow }) => {
 
             {tvShow.backdrop_path && (
                 <div className="relative h-96 bg-cover bg-center">
-                    {/* next/image bileşenini kullanıyoruz */}
                     <Image
                         src={`https://image.tmdb.org/t/p/original${tvShow.backdrop_path}`}
                         alt={tvShow.name}
-                        layout="fill" // Kapsayıcıyı dolduracak şekilde ayarla
-                        objectFit="cover" // Resmin oranını koruyarak kapsayıcıyı doldur
-                        quality={75} // Resim kalitesi
-                        priority // Bu resmin öncelikli yüklenmesini sağlar (LCP için iyi)
-                        className="absolute inset-0" // Tailwind sınıflarını Image bileşenine uyguluyoruz
+                        layout="fill"
+                        objectFit="cover" 
+                        quality={75} 
+                        priority 
+                        className="absolute inset-0"
                     />
                     <div className="absolute inset-0 bg-black opacity-50"></div>
                     <div className="absolute inset-0 flex items-center p-4 max-w-7xl mx-auto z-10">
@@ -67,12 +64,11 @@ const TVDetail = ({ tvShow }) => {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div className="lg:col-span-1">
                         {tvShow.poster_path ? (
-                            // next/image bileşenini kullanıyoruz
                             <Image
                                 src={`https://image.tmdb.org/t/p/w500${tvShow.poster_path}`}
                                 alt={tvShow.name}
-                                width={500} // w500 boyutuna göre genişlik
-                                height={750} // Yaklaşık oran (genişlik 500 ise yükseklik 750 olabilir)
+                                width={500} 
+                                height={750} 
                                 className="w-full rounded-lg shadow-lg"
                             />
                         ) : (
@@ -139,12 +135,11 @@ const TVDetail = ({ tvShow }) => {
                                     {tvShow.credits.cast.slice(0, 8).map(actor => (
                                         <div key={actor.id} className="text-center">
                                             {actor.profile_path ? (
-                                                // next/image bileşenini kullanıyoruz
                                                 <Image
                                                     src={`https://image.tmdb.org/t/p/w185${actor.profile_path}`}
                                                     alt={actor.name}
-                                                    width={64} // w-16 h-16 (64px)
-                                                    height={64} // w-16 h-16 (64px)
+                                                    width={64} 
+                                                    height={64} 
                                                     className="mx-auto rounded-full object-cover"
                                                 />
                                             ) : (
@@ -178,27 +173,26 @@ const TVDetail = ({ tvShow }) => {
     );
 };
 
-// getServerSideProps fonksiyonu, sayfa her istekte sunucu tarafında veriyi getirir
+
 export async function getServerSideProps(context) {
-    const { id } = context.params; // Rota parametresini al
+    const { id } = context.params; 
 
     try {
         const response = await tmdb.get(`/tv/${id}`, {
             params: {
-                language: 'en-US', // Dil ayarını burada yapabilirsiniz
-                append_to_response: 'credits,videos,images' // Ekstra verileri al
+                language: 'en-US',
+                append_to_response: 'credits,videos,images' 
             }
         });
         const tvShowData = response.data;
 
         return {
             props: {
-                tvShow: tvShowData, // Bileşene prop olarak geçecek
+                tvShow: tvShowData, 
             },
         };
     } catch (error) {
         console.error('Error fetching TV show details in getServerSideProps:', error);
-        // Hata durumunda 404 sayfasına yönlendirme yapabiliriz
         return {
             notFound: true, 
         };

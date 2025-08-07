@@ -1,6 +1,3 @@
-// Bu dosyayı yeni Next.js projenizin src/baseUI/progress-circle/ klasörüne yerleştirin.
-// İçeriği olduğu gibi kalacaktır.
-
 const ProgressCircle = ({percent}) => {
 
     const dashArray = Math.PI * 100;
@@ -15,9 +12,9 @@ const ProgressCircle = ({percent}) => {
 
     const track = {
         low: "#571435",
-        medium: "423d0f", // Hata: Bu renk kodu geçersiz. "#423d0f" olmalı.
+        medium: "423d0f", 
         high: "#204529",
-        none: "666666" // Hata: Bu renk kodu geçersiz. "#666666" olmalı.
+        none: "666666" 
     }
 
     const getColor = (rating) => {
@@ -34,7 +31,6 @@ const ProgressCircle = ({percent}) => {
             <svg width="34px" height="34px" viewBox="0 0 100 100" className="rotate-[-90deg]">
                 <circle cx="52.5" cy="52.5" r="50" 
                 fill="transparent" 
-                // Renk kodlarındaki olası hataları düzelttim (tırnak işaretleri ve '#' eksikliği)
                 stroke={track[getColor(percent)]} strokeWidth={6}
                 strokeDasharray={dashArray}
                 strokeDashoffset={dashOffset}
@@ -42,7 +38,6 @@ const ProgressCircle = ({percent}) => {
                 />
                 <circle cx="52.5" cy="52.5" r="50" 
                 fill="transparent" 
-                // Renk kodlarındaki olası hataları düzelttim (tırnak işaretleri ve '#' eksikliği)
                 stroke={bar[getColor(percent)]} strokeWidth={6}
                 strokeDasharray={dashArray}
                 strokeDashoffset={dashOffset}

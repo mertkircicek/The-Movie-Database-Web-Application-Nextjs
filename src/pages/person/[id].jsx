@@ -1,13 +1,12 @@
 import React from 'react';
-import { useRouter } from 'next/router'; // useParams ve useNavigate yerine useRouter kullanıyoruz
-import Image from 'next/image'; // Resim optimizasyonu için next/image kullanıyoruz
-import tmdb from '../../api/tmdb'; // Axios instance'ınız
+import { useRouter } from 'next/router'; 
+import Image from 'next/image';
+import tmdb from '../../api/tmdb'; 
 
-// Bu bileşen artık veriyi getServerSideProps'tan prop olarak alacak
+   
 const PersonDetail = ({ person }) => {
-    const router = useRouter(); // Yönlendirme için useRouter kullanıyoruz
+    const router = useRouter(); 
 
-    // person prop'u yoksa (örneğin getServerSideProps notFound döndürdüyse)
     if (!person) {
         return (
             <div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -21,7 +20,7 @@ const PersonDetail = ({ person }) => {
             <div className="bg-tmdbDarkBlue p-4">
                 <div className="max-w-7xl mx-auto flex items-center">
                     <button
-                        onClick={() => router.back()} // navigate('/') yerine router.back() kullanıyoruz
+                        onClick={() => router.back()} 
                         className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-full transition-colors duration-200"
                     >
                         <svg
@@ -48,14 +47,13 @@ const PersonDetail = ({ person }) => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div className="md:col-span-1">
                         {person.profile_path ? (
-                            // next/image bileşenini kullanıyoruz
                             <Image
                                 src={`https://image.tmdb.org/t/p/w500${person.profile_path}`}
                                 alt={person.name}
-                                width={500} // w500 boyutuna göre genişlik
-                                height={750} // Yaklaşık oran (genişlik 500 ise yükseklik 750 olabilir)
+                                width={500}
+                                height={750} 
                                 className="w-full rounded-lg shadow-lg"
-                                priority // Ana görsel olduğu için öncelikli yükle
+                                priority 
                             />
                         ) : (
                             <div className="w-full h-96 bg-gray-700 rounded-lg flex items-center justify-center">
@@ -106,12 +104,11 @@ const PersonDetail = ({ person }) => {
                             {person.combined_credits.cast.slice(0, 8).map(item => (
                                 <div key={item.id} className="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
                                     {item.poster_path ? (
-                                        // next/image bileşenini kullanıyoruz
                                         <Image
                                             src={`https://image.tmdb.org/t/p/w185${item.poster_path}`}
                                             alt={item.title || item.name}
-                                            width={185} // w185 boyutuna göre genişlik
-                                            height={278} // Yaklaşık oran (genişlik 185 ise yükseklik 278 olabilir)
+                                            width={185} 
+                                            height={278} 
                                             className="w-full h-auto object-cover"
                                         />
                                     ) : (
@@ -137,27 +134,25 @@ const PersonDetail = ({ person }) => {
     );
 };
 
-// getServerSideProps fonksiyonu, sayfa her istekte sunucu tarafında veriyi getirir
 export async function getServerSideProps(context) {
-    const { id } = context.params; // Rota parametresini al
+    const { id } = context.params; 
 
     try {
         const response = await tmdb.get(`/person/${id}`, {
             params: {
-                language: 'en-US', // Dil ayarını burada yapabilirsiniz
-                append_to_response: 'combined_credits,images' // Ekstra verileri al
+                language: 'en-US',
+                append_to_response: 'combined_credits,images' 
             }
         });
         const personData = response.data;
 
         return {
             props: {
-                person: personData, // Bileşene prop olarak geçecek
+                person: personData, 
             },
         };
     } catch (error) {
         console.error('Error fetching person details in getServerSideProps:', error);
-        // Hata durumunda 404 sayfasına yönlendirme yapabiliriz
         return {
             notFound: true, 
         };

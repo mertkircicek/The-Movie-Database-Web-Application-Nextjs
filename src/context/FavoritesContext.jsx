@@ -1,11 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 
-// Firebase importları kaldırıldı, çünkü artık localStorage kullanıyoruz
-// import { initializeApp } from 'firebase/app';
-// import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from 'firebase/auth';
-// import { getFirestore, doc, setDoc, onSnapshot } from 'firebase/firestore';
-
 const FavoritesContext = createContext();
 
 export const useFavorites = () => {
@@ -15,8 +10,7 @@ export const useFavorites = () => {
 export const FavoritesProvider = ({ children }) => {
     const [favorites, setFavorites] = useState([]);
 
-    // Favorileri localStorage'dan yükle
-    useEffect(() => {
+       useEffect(() => {
         try {
             const savedFavorites = localStorage.getItem('favorites');
             if (savedFavorites) {
@@ -24,18 +18,17 @@ export const FavoritesProvider = ({ children }) => {
             }
         } catch (error) {
             console.error("Error loading favorites from localStorage", error);
-            setFavorites([]); // Hata durumunda favorileri sıfırla
+            setFavorites([]); 
         }
-    }, []); // Sadece bir kez, bileşen yüklendiğinde çalışır
+    }, []); 
 
-    // Favoriler değiştiğinde localStorage'a kaydet
     useEffect(() => {
         try {
             localStorage.setItem('favorites', JSON.stringify(favorites));
         } catch (error) {
             console.error("Error saving favorites to localStorage", error);
         }
-    }, [favorites]); // favorites state'i her değiştiğinde çalışır
+    }, [favorites]); 
 
     const toggleFavorite = (item) => {
         const isCurrentlyFavorite = favorites.some(fav => fav.id === item.id);
@@ -48,7 +41,7 @@ export const FavoritesProvider = ({ children }) => {
             updatedFavorites = [...favorites, item];
             toast.success(`${item.name || item.title} added to favorites!`);
         }
-        setFavorites(updatedFavorites); // State'i güncelle, bu da ikinci useEffect'i tetikleyerek localStorage'a kaydeder
+        setFavorites(updatedFavorites); 
     };
 
     const isFavorite = (id) => {

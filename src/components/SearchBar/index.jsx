@@ -1,11 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { useRouter } from 'next/router'; // useNavigate yerine useRouter kullanıyoruz
+import { useRouter } from 'next/router';
 import tmdb from '../../api/tmdb';
 import { FaFilm, FaTv, FaUser, FaSearch } from 'react-icons/fa';
 
 const SearchBar = ({ onSubmit, onClose, isDismissible = false }) => { 
     const searchInputRef = useRef();
-    const router = useRouter(); // useNavigate yerine useRouter kullanıyoruz
+    const router = useRouter();
     const [searchResults, setSearchResults] = useState([]);
     const [isSearching, setIsSearching] = useState(false);
     const [showResults, setShowResults] = useState(false);
@@ -13,49 +13,53 @@ const SearchBar = ({ onSubmit, onClose, isDismissible = false }) => {
     const containerRef = useRef(null);
 
     useEffect(() => {
-        if (isDismissible) {
-            const handleClickOutside = (event) => {
-                if (containerRef.current && !containerRef.current.contains(event.target)) {
-                    setShowResults(false);
-                    setSearchResults([]);
-                    setSearchQuery('');
-                    if (onClose) { 
-                        onClose();
-                    }
+        const handleClickOutside = (event) => {
+            if (containerRef.current && !containerRef.current.contains(event.target)) {
+                setShowResults(false);
+                setSearchResults([]);
+                
+                if (isDismissible && onClose) {
+                    onClose();
                 }
-            };
-            document.addEventListener("mousedown", handleClickOutside);
-            return () => {
-                document.removeEventListener("mousedown", handleClickOutside);
-            };
-        }
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
     }, [isDismissible, onClose]); 
+
+    const handleMouseLeave = () => {
+        if (showResults && !isSearching) {
+            setShowResults(false);
+            setSearchResults([]);
+        }
+    };
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             const query = searchQuery.trim();
             if (query) {
-                if (onSubmit) { 
+                if (onSubmit) {
                     onSubmit(query);
                 } else {
-                    // navigate yerine router.push kullanıyoruz
                     router.push(`/search?query=${encodeURIComponent(query)}`);
                 }
                 setSearchResults([]);
                 setShowResults(false);
-                setSearchQuery('');
+                if (isDismissible && onClose) {
+                    onClose();
+                }
             }
         }
     };
 
     const handleResultClick = (item) => {
         const { media_type, id } = item;
-        // navigate yerine router.push kullanıyoruz
         router.push(`/${media_type}/${id}`);
         setSearchResults([]);
         setShowResults(false);
-        setSearchQuery('');
-        if (isDismissible && onClose) { 
+        if (isDismissible && onClose) {
             onClose();
         }
     };
@@ -64,13 +68,11 @@ const SearchBar = ({ onSubmit, onClose, isDismissible = false }) => {
         if (onSubmit) {
             onSubmit(query);
         } else {
-            // navigate yerine router.push kullanıyoruz
             router.push(`/search?query=${encodeURIComponent(query)}`);
         }
         setSearchResults([]);
         setShowResults(false);
-        setSearchQuery('');
-        if (isDismissible && onClose) { 
+        if (isDismissible && onClose) {
             onClose();
         }
     };
@@ -92,10 +94,15 @@ const SearchBar = ({ onSubmit, onClose, isDismissible = false }) => {
             ).slice(0, 10);
             
             setSearchResults(results);
-            setShowResults(true);
+            if (query.length >= 3 && results.length > 0) {
+                setShowResults(true);
+            } else {
+                setShowResults(false);
+            }
         } catch (error) {
             console.error('Search error:', error);
             setSearchResults([]);
+            setShowResults(false); 
         } finally {
             setIsSearching(false);
         }
@@ -156,16 +163,16 @@ const SearchBar = ({ onSubmit, onClose, isDismissible = false }) => {
     };
 
     return (
-        <div className="relative w-full" ref={containerRef}> 
+        <div className="relative w-full px-4" ref={containerRef} onMouseLeave={handleMouseLeave}>
             <div className="relative">
                 <input
                     ref={searchInputRef}
                     type="text"
                     value={searchQuery}
                     onChange={handleInputChange}
-                    className="w-full h-[4rem] pl-12 pr-4 text-lg text-gray-900 placeholder-gray-500 focus:outline-none"
+                    className="w-full h-[4rem] rounded-[8rem] pl-12 pr-4 text-lg text-gray-900 placeholder-gray-500 focus:outline-none"
                     placeholder="Search for a movie, tv show, or person"
-                    onFocus={() => { if(searchResults.length > 0) setShowResults(true); }}
+                    onFocus={() => { if(searchQuery.length >=3 && searchResults.length > 0) setShowResults(true); }}
                     onKeyDown={handleKeyDown}
                 />
                 <div className="absolute left-4 top-1/2 transform -translate-y-1/2">

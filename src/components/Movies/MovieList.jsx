@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router'; // useNavigate yerine useRouter kullanıyoruz
+import { useRouter } from 'next/router'; 
 import tmdb from '../../api/tmdb'; 
 import MovieCard from './MovieCard';
 import { request } from '../../api/request';
@@ -10,7 +10,7 @@ import { useFavorites } from '../../context/FavoritesContext';
 const MovieList = ({ fetch }) => {
     const [movies, setMovies] = useState([]);
     const { toggleFavorite, isFavorite } = useFavorites(); 
-    const router = useRouter(); // useNavigate yerine useRouter kullanıyoruz
+    const router = useRouter(); 
 
     useEffect(() => {
         const fetchMovies = async () => {
@@ -28,7 +28,6 @@ const MovieList = ({ fetch }) => {
                 if (data && Array.isArray(data.results)) {
                     const moviesWithMediaType = data.results.map(item => ({
                         ...item,
-                        // API yolu '/movie/' içeriyorsa 'movie', aksi takdirde 'tv' olarak media_type belirle
                         media_type: apiUrlPath.includes('/movie/') ? 'movie' : 'tv'
                     }));
                     setMovies(moviesWithMediaType);
@@ -42,11 +41,10 @@ const MovieList = ({ fetch }) => {
             }
         };
         fetchMovies();
-    }, [fetch]); // 'fetch' prop'u değiştiğinde filmleri tekrar getir
+    }, [fetch]); 
 
     const handleCardClick = (item) => {
         const { media_type, id } = item;
-        // navigate yerine router.push kullanıyoruz
         router.push(`/${media_type}/${id}`);
     };
 

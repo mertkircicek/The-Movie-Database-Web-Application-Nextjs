@@ -1,6 +1,3 @@
-// Bu dosyayı yeni Next.js projenizin src/Layouts/NavBar/ klasörüne yerleştirin.
-// İçeriği olduğu gibi kalacaktır.
-
 import NavBarList from './navBarList';
 import {navItemsLeft, navItemsRight } from "./navItems";
  

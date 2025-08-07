@@ -6,8 +6,8 @@ const AiringTodayTvShowsPage = () => {
   return (
     <MediaListPage 
       mediaType="tv"
-      categoryTitle="Airing Today" // Sayfa başlığı
-      fetchPath={request.tvAiringToday} // 'Airing Today' için doğru API yolu
+      categoryTitle="Airing Today" 
+      fetchPath={request.tvAiringToday} 
     />
   );
 };

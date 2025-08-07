@@ -1,15 +1,14 @@
-import React, { useState, useRef } from 'react'; // useRef'i import ettik
+import React, { useState, useRef } from 'react'; 
 import Link from 'next/link';
 import { FaPlus, FaStar, FaSearch } from 'react-icons/fa'; 
 import { useSearch } from '../../context/SearchContext';
 
 const NavBarList = ({items}) => {
     const { toggleSearch } = useSearch();
-    const [activePopover, setActivePopover] = useState(null); // State to manage which popover is open
-    const leaveTimeoutRef = useRef(null); // Timeout ID'sini saklamak için useRef kullanıyoruz
+    const [activePopover, setActivePopover] = useState(null);
+    const leaveTimeoutRef = useRef(null); 
 
     const handleMouseEnter = (itemName) => {
-        // Eğer bir önceki kapanma gecikmesi varsa iptal et
         if (leaveTimeoutRef.current) {
             clearTimeout(leaveTimeoutRef.current);
             leaveTimeoutRef.current = null;
@@ -18,12 +17,9 @@ const NavBarList = ({items}) => {
     };
 
     const handleMouseLeave = () => {
-        // Popover'ı hemen kapatmak yerine 200ms gecikme ekle
-        // Bu gecikme, farenin ana öğeden popover'a veya popover içindeki öğelere geçerken
-        // menünün aniden kapanmasını engeller.
         leaveTimeoutRef.current = setTimeout(() => {
             setActivePopover(null);
-        }, 200); // 200 milisaniye gecikme
+        }, 200); 
     };
 
     const getItem = (item) => {
@@ -63,8 +59,6 @@ const NavBarList = ({items}) => {
             case 'link': 
                 itemList = (
                     <div
-                        // **Önemli:** Hem ana öğeye hem de popover'ın kendisine mouseEnter/Leave olaylarını ekliyoruz.
-                        // Böylece fare popover'ın üzerine geçtiğinde kapanma gecikmesi iptal edilir ve menü açık kalır.
                         onMouseEnter={() => item.subItems && handleMouseEnter(item.name)}
                         onMouseLeave={handleMouseLeave}
                         className="relative"
@@ -82,7 +76,6 @@ const NavBarList = ({items}) => {
                         {item.subItems && activePopover === item.name && (
                             <div 
                                 className="absolute top-full left-0 mt-2 bg-white text-tmdbDarkBlue rounded-md shadow-lg py-1 z-50 whitespace-nowrap"
-                                // **Önemli:** Popover'ın kendi üzerine gelindiğinde de kapanma gecikmesini iptal et
                                 onMouseEnter={() => handleMouseEnter(item.name)}
                                 onMouseLeave={handleMouseLeave}
                             >

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router'; // useLocation ve useNavigate yerine useRouter kullanıyoruz
-import Image from 'next/image'; // Resim optimizasyonu için next/image kullanıyoruz
+import { useRouter } from 'next/router'; 
+import Image from 'next/image'; 
 import tmdb from '../api/tmdb';
 
 const SearchResultsPage = () => {
@@ -11,11 +11,10 @@ const SearchResultsPage = () => {
     const [categoryCounts, setCategoryCounts] = useState({});
     const [activeFilter, setActiveFilter] = useState('All');
 
-    const router = useRouter(); // useRouter hook'unu kullanıyoruz
-    const searchQuery = router.query.query; // Arama sorgusunu router.query'den alıyoruz
+    const router = useRouter(); 
+    const searchQuery = router.query.query; 
 
     useEffect(() => {
-        // searchQuery'nin undefined olmaması için kontrol
         if (!searchQuery) {
             setLoading(false);
             setResults([]);
@@ -63,7 +62,7 @@ const SearchResultsPage = () => {
         };
 
         fetchSearchResults();
-    }, [searchQuery]); // searchQuery değiştiğinde useEffect'i tekrar çalıştır
+    }, [searchQuery]); 
 
     useEffect(() => {
         if (activeFilter === 'All') {
@@ -71,13 +70,12 @@ const SearchResultsPage = () => {
         } else {
             setFilteredResults(results.filter(item => item.media_type === activeFilter));
         }
-    }, [activeFilter, results]); // activeFilter veya results değiştiğinde useEffect'i tekrar çalıştır
+    }, [activeFilter, results]); 
 
     const getTitle = (item) => {
         return item.title || item.name;
     };
 
-    // getPosterUrl fonksiyonu Image bileşeni için URL sağlar
     const getPosterUrl = (path, size = 'w200') => {
         if (!path) return 'https://via.placeholder.com/200x300?text=No+Image';
         return `https://image.tmdb.org/t/p/${size}${path}`;
@@ -95,7 +93,6 @@ const SearchResultsPage = () => {
 
     const handleResultClick = (item) => {
         const { media_type, id } = item;
-        // navigate yerine router.push kullanıyoruz
         router.push(`/${media_type}/${id}`);
     };
 
@@ -153,13 +150,12 @@ const SearchResultsPage = () => {
                                     className="flex bg-tmdbLightBlue rounded-lg shadow-lg overflow-hidden cursor-pointer hover:bg-gray-700 transition-colors duration-200"
                                     onClick={() => handleResultClick(item)}
                                 > 
-                                    <div className="flex-shrink-0 w-[94px] h-[141px] relative"> {/* relative ekledik */}
-                                        {/* img etiketini Next.js Image bileşeni ile değiştiriyoruz */}
+                                    <div className="flex-shrink-0 w-[94px] h-[141px] relative">
                                         <Image
                                             src={getPosterUrl(item.poster_path || item.profile_path, 'w94_and_h141_face')}
                                             alt={getTitle(item)}
-                                            width={94} // w-[94px] sınıfına karşılık gelen genişlik
-                                            height={141} // h-[141px] sınıfına karşılık gelen yükseklik
+                                            width={94} 
+                                            height={141} 
                                             className="w-full h-full object-cover"
                                         />
                                     </div>

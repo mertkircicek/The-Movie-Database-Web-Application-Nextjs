@@ -1,6 +1,3 @@
-// Bu dosyayı yeni Next.js projenizin src/baseUI/Switch/ klasörüne yerleştirin.
-// İçeriği olduğu gibi kalacaktır.
-
 import { useState, useRef, useLayoutEffect } from "react";
 
 const Switch = ({ items, onToogle, selectedItem }) => {
@@ -8,6 +5,7 @@ const Switch = ({ items, onToogle, selectedItem }) => {
     const selectedIndex = items.indexOf(selectedItem);
 
     const itemRefs = useRef([]);
+
     const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0 });
 
     useLayoutEffect(() => {
@@ -37,8 +35,8 @@ const Switch = ({ items, onToogle, selectedItem }) => {
                     ref={(el) => (itemRefs.current[index] = el)}
     
                     onClick={() => onToogle(item)}
-                    className={`py-1 px-5 h-8 rounded-[30px] flex items-center justify-center whitespace-nowrap ${
-                        selectedIndex === index ? activeTextColor : ""
+                    className={`py-1 px-5 h-8 rounded-[30px] flex items-center justify-center whitespace-nowrap 
+                        ${selectedIndex === index ? activeTextColor : ""
                     }`}
                 >
                     {item}

@@ -1,38 +1,47 @@
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router'; 
-import Image from 'next/image'; 
-import { useFavorites } from '../context/FavoritesContext';
+import { useRouter } from 'next/router';
+import Image from 'next/image';
 import { FaArrowLeft } from 'react-icons/fa';
 
-const FavoritesPage = () => {
-    const { favorites } = useFavorites();
-    const router = useRouter(); 
-    const [filteredFavorites, setFilteredFavorites] = useState([]);
+const WatchedPage = () => {
+    const router = useRouter();
+    const [watchedList, setWatchedList] = useState([]);
+    const [filteredWatchedList, setFilteredWatchedList] = useState([]);
     const [categoryCounts, setCategoryCounts] = useState({});
     const [activeFilter, setActiveFilter] = useState('All');
 
     useEffect(() => {
-        const counts = favorites.reduce((acc, item) => {
-            const mediaType = item.media_type;
-            if (mediaType in acc) {
-                acc[mediaType]++;
+        try {
+            const savedWatchedList = JSON.parse(localStorage.getItem('watchedList') || '[]');
+            setWatchedList(savedWatchedList);
+
+            const counts = savedWatchedList.reduce((acc, item) => {
+                const mediaType = item.media_type;
+                if (mediaType in acc) {
+                    acc[mediaType]++;
+                } else {
+                    acc[mediaType] = 1;
+                }
+                return acc;
+            }, {});
+
+            setCategoryCounts({
+                All: savedWatchedList.length,
+                ...counts
+            });
+
+            if (activeFilter === 'All') {
+                setFilteredWatchedList(savedWatchedList);
             } else {
-                acc[mediaType] = 1;
+                setFilteredWatchedList(savedWatchedList.filter(item => item.media_type === activeFilter));
             }
-            return acc;
-        }, {});
-
-        setCategoryCounts({
-            All: favorites.length,
-            ...counts
-        });
-
-        if (activeFilter === 'All') {
-            setFilteredFavorites(favorites);
-        } else {
-            setFilteredFavorites(favorites.filter(item => item.media_type === activeFilter));
+        } catch (error) {
+            console.error("Error loading watched list from localStorage", error);
+            setWatchedList([]);
+            setFilteredWatchedList([]);
+            setCategoryCounts({ All: 0 });
         }
-    }, [favorites, activeFilter]);
+    }, [activeFilter]); 
 
     const getTitle = (item) => {
         return item.title || item.name;
@@ -58,16 +67,16 @@ const FavoritesPage = () => {
         router.push(`/${media_type}/${id}`);
     };
 
-    if (favorites.length === 0) {
+    if (watchedList.length === 0) {
         return (
             <div className="min-h-screen bg-tmdbDarkBlue text-white flex items-center justify-center">
                 <div className="text-xl p-6 bg-gray-800 rounded-lg shadow-xl text-center">
-                    <p>Your favorites list is empty.</p>
+                    <p>İzlediğiniz içerik listeniz boş.</p>
                     <button
-                        onClick={() => router.push('/')} 
+                        onClick={() => router.push('/')}
                         className="mt-4 px-6 py-2 bg-tmdbLightGreen hover:bg-tmdbLightBlue text-white font-bold rounded-full transition-colors duration-200"
                     >
-                        Explore Now
+                        Şimdi Keşfet
                     </button>
                 </div>
             </div>
@@ -79,21 +88,21 @@ const FavoritesPage = () => {
             <div className="max-w-7xl mx-auto px-4">
                 <div className="flex items-center justify-between mb-8">
                     <button
-                        onClick={() => router.back()} 
+                        onClick={() => router.back()}
                         className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-700"
                     >
                         <FaArrowLeft />
-                        <span className="hidden sm:inline">Back</span>
+                        <span className="hidden sm:inline">Geri</span>
                     </button>
-                    <h1 className="text-3xl font-bold text-center flex-grow">FAVORITES</h1>
+                    <h1 className="text-3xl font-bold text-center flex-grow">İZLENENLER LİSTEM</h1>
                     <div className="w-10 sm:w-20"></div> 
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     <div className="md:col-span-1 p-4 bg-gray-800 rounded-lg shadow-lg h-fit">
-                        <h2 className="text-2xl font-bold mb-4 text-white">Categories</h2>
+                        <h2 className="text-2xl font-bold mb-4 text-white">Kategoriler</h2>
                         <ul className="space-y-2">
-                            {['All', 'movie', 'tv', 'person'].map(filter => (
+                            {['All', 'movie', 'tv'].map(filter => (
                                 <li
                                     key={filter}
                                     onClick={() => setActiveFilter(filter)}
@@ -103,7 +112,7 @@ const FavoritesPage = () => {
                                             : 'hover:bg-gray-700'
                                     }`}
                                 >
-                                    <span className="capitalize">{filter}</span>
+                                    <span className="capitalize">{filter === 'All' ? 'Tümü' : filter === 'movie' ? 'Filmler' : 'Diziler'}</span>
                                     <span className="bg-gray-600 text-white text-xs font-semibold px-2 py-1 rounded-full">
                                         {categoryCounts[filter] || 0}
                                     </span>
@@ -113,34 +122,34 @@ const FavoritesPage = () => {
                     </div>
 
                     <div className="md:col-span-3">
-                        {filteredFavorites.length === 0 ? (
+                        {filteredWatchedList.length === 0 ? (
                             <div className="text-xl text-center mt-8 text-gray-400">
-                                No favorites found in this category.
+                                Bu kategoride izlenen öğe bulunamadı.
                             </div>
                         ) : (
                             <div className="space-y-6">
-                                {filteredFavorites.map((item) => (
+                                {filteredWatchedList.map((item) => (
                                     <div
                                         key={`${item.media_type}-${item.id}`}
                                         className="flex bg-tmdbDarkBlue rounded-lg shadow-lg overflow-hidden cursor-pointer hover:bg-gray-700 transition-colors duration-200"
                                         onClick={() => handleResultClick(item)}
-                                    >
-                                        <div className="flex-shrink-0 w-24 h-36 relative"> 
+                                    > 
+                                        <div className="flex-shrink-0 w-24 h-36 relative">
                                             <Image
                                                 src={getPosterUrl(item.poster_path || item.profile_path, 'w185')}
                                                 alt={getTitle(item)}
-                                                layout="fill" 
-                                                objectFit="cover" 
+                                                layout="fill"
+                                                objectFit="cover"
                                                 className="w-full h-full object-cover"
                                             />
                                         </div>
                                         <div className="p-4 flex-1">
                                             <h3 className="text-xl font-bold text-white mb-1">{getTitle(item)}</h3>
-                                            <p className="text-sm text-gray-300 mb-2"> 
-                                                {item.media_type === 'person' ? 'Person' : item.media_type === 'movie' ? 'Movie' : 'TV Show'} | {getReleaseDate(item)}
+                                            <p className="text-sm text-gray-300 mb-2">
+                                                {item.media_type === 'movie' ? 'Film' : 'Dizi'} | {getReleaseDate(item)}
                                             </p>
                                             <p className="text-gray-300 text-sm line-clamp-3">
-                                                {item.overview || 'No summary available.'}
+                                                {item.overview || 'Özet mevcut değil.'}
                                             </p>
                                         </div>
                                     </div>
@@ -154,4 +163,4 @@ const FavoritesPage = () => {
     );
 };
 
-export default FavoritesPage;
+export default WatchedPage;

@@ -1,6 +1,3 @@
-// Bu dosyayı yeni Next.js projenizin src/baseUI/blur/ klasörüne yerleştirin.
-// İçeriği olduğu gibi kalacaktır.
-
 import {memo} from 'react';
 
 const Blur = memo(() => {
