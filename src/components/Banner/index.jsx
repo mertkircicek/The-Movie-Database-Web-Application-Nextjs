@@ -86,14 +86,13 @@ const Banner = () => {
         <div
             className="relative h-[250px] md:h-[300px] lg:h-[400px] bg-cover bg-center text-white"
             style={{
-                // TMDB'nin kendi sitesindeki gibi arka plan resminin üzerinde sadece mavi tonlarının görünmesini sağlıyoruz.
-                // Arka plan rengini belirgin mavi tonu olarak ayarladık.
-                backgroundColor: 'rgb(3, 37, 65)', 
+                // Arka plan rengini daha şeffaf bir mavi tonu olarak ayarladık (opaklık 0.4).
+                backgroundColor: 'rgba(3, 37, 65, 0.9)', // Opaklık 0.4 olarak ayarlandı
                 // Arka plan resmini ekledik.
                 backgroundImage: `url('${backgroundImageUrl}')`,
-                // Resim ile arka plan rengini karıştırmak için 'multiply' blend modunu kullandık.
-                // Bu, resmin dokusunu korurken sadece mavi tonlarının görünmesini sağlar.
-                backgroundBlendMode: 'multiply', 
+                // Resim ile arka plan rengini karıştırmak için 'overlay' blend modunu kullandık.
+                // Bu, resmin daha görünür olmasını sağlarken mavi tonunu korur.
+                backgroundBlendMode: 'overlay', 
             }}
         >
             <Container>

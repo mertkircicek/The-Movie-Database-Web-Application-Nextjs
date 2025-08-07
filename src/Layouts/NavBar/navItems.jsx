@@ -1,5 +1,4 @@
-// Bu dosyayı yeni Next.js projenizin src/Layouts/NavBar/ klasörüne yerleştirin.
-// İçeriği olduğu gibi kalacaktır.
+// Bu dosya, navigasyon menünüzdeki öğeleri tanımlar.
 
 export const navItemsLeft = [
     {
@@ -10,12 +9,24 @@ export const navItemsLeft = [
     {
         name: 'Movies',
         type: 'link', 
-        path: '/movies' 
+        path: '/movies',
+        subItems: [ // Filmler için de alt öğe ekleyebiliriz, şimdilik boş bırakıyorum
+            { name: 'Popular', path: '/movies/popular' },
+            { name: 'Now Playing', path: '/movies/now-playing' },
+            { name: 'Upcoming', path: '/movies/upcoming' },
+            { name: 'Top Rated', path: '/movies/top-rated' }
+        ]
     },
     {
         name: 'TV Shows',
         type: 'link',
-        path: '/tv-shows'
+        path: '/tv-shows', // Genel TV şovları sayfası
+        subItems: [
+            { name: 'Popular', path: '/tv-shows/popular' },
+            { name: 'Airing Today', path: '/tv-shows/airing-today' }, 
+            { name: 'On TV', path: '/tv-shows/on-the-air' }, // Yeni On TV sayfası
+            { name: 'Top Rated', path: '/tv-shows/top-rated' }
+        ]
     },
     {
         name: 'People',

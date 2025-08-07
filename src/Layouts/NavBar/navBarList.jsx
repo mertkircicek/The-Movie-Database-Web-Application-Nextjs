@@ -1,11 +1,30 @@
-import React from 'react';
-import Link from 'next/link'; // next/link'ten import ediyoruz
-// react-fontawesome yerine react-icons'tan gerekli ikonları import ediyoruz
+import React, { useState, useRef } from 'react'; // useRef'i import ettik
+import Link from 'next/link';
 import { FaPlus, FaStar, FaSearch } from 'react-icons/fa'; 
 import { useSearch } from '../../context/SearchContext';
 
 const NavBarList = ({items}) => {
     const { toggleSearch } = useSearch();
+    const [activePopover, setActivePopover] = useState(null); // State to manage which popover is open
+    const leaveTimeoutRef = useRef(null); // Timeout ID'sini saklamak için useRef kullanıyoruz
+
+    const handleMouseEnter = (itemName) => {
+        // Eğer bir önceki kapanma gecikmesi varsa iptal et
+        if (leaveTimeoutRef.current) {
+            clearTimeout(leaveTimeoutRef.current);
+            leaveTimeoutRef.current = null;
+        }
+        setActivePopover(itemName);
+    };
+
+    const handleMouseLeave = () => {
+        // Popover'ı hemen kapatmak yerine 200ms gecikme ekle
+        // Bu gecikme, farenin ana öğeden popover'a veya popover içindeki öğelere geçerken
+        // menünün aniden kapanmasını engeller.
+        leaveTimeoutRef.current = setTimeout(() => {
+            setActivePopover(null);
+        }, 200); // 200 milisaniye gecikme
+    };
 
     const getItem = (item) => {
         let itemList = null;
@@ -21,25 +40,21 @@ const NavBarList = ({items}) => {
                 itemList = <p className="border-white border-solid rounded-[3px] py-[3px] px-[5px] border-[1px] hover:bg-white hover:text-tmdbDarkBlue">{item.name}</p>
                 break;
             case 'icon':
-                // Arama ikonu için özel durum: Link yerine buton kullanıyoruz
                 if (item.name === 'search') {
                     itemList = (
                         <button onClick={toggleSearch} className="focus:outline-none">
-                            {/* Boyutlandırma için Tailwind sınıfları kullanıyoruz */}
                             <FaSearch className="w-5 h-5" /> 
                         </button>
                     );
                 } else if (item.name === 'plus') {
                     itemList = (
                         <Link href={item.path}>
-                            {/* Boyutlandırma için Tailwind sınıfları kullanıyoruz */}
                             <FaPlus className="w-5 h-5" /> 
                         </Link>
                     );
                 } else if (item.name === 'star') {
                     itemList = (
                         <Link href={item.path}>
-                            {/* Boyutlandırma için Tailwind sınıfları kullanıyoruz */}
                             <FaStar className="w-5 h-5" /> 
                         </Link>
                     );
@@ -47,9 +62,40 @@ const NavBarList = ({items}) => {
                 break;
             case 'link': 
                 itemList = (
-                    <Link href={item.path} className="hover:text-gray-300 transition-colors">
-                        {item.name}
-                    </Link>
+                    <div
+                        // **Önemli:** Hem ana öğeye hem de popover'ın kendisine mouseEnter/Leave olaylarını ekliyoruz.
+                        // Böylece fare popover'ın üzerine geçtiğinde kapanma gecikmesi iptal edilir ve menü açık kalır.
+                        onMouseEnter={() => item.subItems && handleMouseEnter(item.name)}
+                        onMouseLeave={handleMouseLeave}
+                        className="relative"
+                    >
+                        {item.subItems ? (
+                            <span className="hover:text-gray-300 transition-colors cursor-pointer">
+                                {item.name}
+                            </span>
+                        ) : (
+                            <Link href={item.path} className="hover:text-gray-300 transition-colors">
+                                {item.name}
+                            </Link>
+                        )}
+                        
+                        {item.subItems && activePopover === item.name && (
+                            <div 
+                                className="absolute top-full left-0 mt-2 bg-white text-tmdbDarkBlue rounded-md shadow-lg py-1 z-50 whitespace-nowrap"
+                                // **Önemli:** Popover'ın kendi üzerine gelindiğinde de kapanma gecikmesini iptal et
+                                onMouseEnter={() => handleMouseEnter(item.name)}
+                                onMouseLeave={handleMouseLeave}
+                            >
+                                {item.subItems.map(subItem => (
+                                    <Link key={subItem.name} href={subItem.path}>
+                                        <div className="block px-4 py-2 hover:bg-gray-200">
+                                            {subItem.name}
+                                        </div>
+                                    </Link>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 );
                 break;
             default:

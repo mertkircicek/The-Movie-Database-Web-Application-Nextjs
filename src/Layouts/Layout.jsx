@@ -42,7 +42,7 @@ const Layout = ({ children }) => {
             </div>
 
             {/* Sayfa içeriği burada render edilecek. NavBar'ın yüksekliği (h-20) kadar üstten boşluk bırakıyoruz ki içerik NavBar'ın altında kalmasın. */}
-            <div className="pt-20"> 
+            <div> 
                 {children} {/* Outlet yerine children prop'unu render ediyoruz */}
             </div>
         </div>

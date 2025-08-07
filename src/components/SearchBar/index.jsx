@@ -156,14 +156,14 @@ const SearchBar = ({ onSubmit, onClose, isDismissible = false }) => {
     };
 
     return (
-        <div className="relative w-full px-4" ref={containerRef}> 
+        <div className="relative w-full" ref={containerRef}> 
             <div className="relative">
                 <input
                     ref={searchInputRef}
                     type="text"
                     value={searchQuery}
                     onChange={handleInputChange}
-                    className="w-full h-[4rem] rounded-[8rem] pl-12 pr-4 text-lg text-gray-900 placeholder-gray-500 focus:outline-none"
+                    className="w-full h-[4rem] pl-12 pr-4 text-lg text-gray-900 placeholder-gray-500 focus:outline-none"
                     placeholder="Search for a movie, tv show, or person"
                     onFocus={() => { if(searchResults.length > 0) setShowResults(true); }}
                     onKeyDown={handleKeyDown}
