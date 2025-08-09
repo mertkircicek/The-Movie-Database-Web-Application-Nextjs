@@ -7,10 +7,10 @@ export const navItemsLeft = [
     {
         name: 'Movies',
         type: 'link', 
-        path: '/movies', // General movies page
+        path: '/movies', 
         subItems: [
             { name: 'Popular', path: '/movies/popular' },
-            { name: 'Now Playing', path: '/movies/now-playing' }, // Corresponds to "In Theaters" in request.jsx
+            { name: 'Now Playing', path: '/movies/now-playing' }, 
             { name: 'Upcoming', path: '/movies/upcoming' },
             { name: 'Top Rated', path: '/movies/top-rated' }
         ]
@@ -18,11 +18,11 @@ export const navItemsLeft = [
     {
         name: 'TV Shows',
         type: 'link',
-        path: '/tv-shows', // General TV shows page
+        path: '/tv-shows', 
         subItems: [
             { name: 'Popular', path: '/tv-shows/popular' },
-            { name: 'Now Playing', path: '/tv-shows/now-playing' }, // On The Air yerine Now Playing
-            { name: 'Upcoming', path: '/tv-shows/upcoming' }, // Yeni Upcoming sayfası
+            { name: 'Now Playing', path: '/tv-shows/now-playing' }, 
+            { name: 'Upcoming', path: '/tv-shows/upcoming' }, 
             { name: 'Top Rated', path: '/tv-shows/top-rated' }
         ]
     },
@@ -34,10 +34,10 @@ export const navItemsLeft = [
     {
         name: 'More',
         type: 'link',
-        path: '/more', // Genel "Daha Fazla" sayfası (isteğe bağlı)
+        path: '/more', 
         subItems: [
-            { name: 'Watchlist', path: '/watchlist' }, // Yeni İzleme Listesi linki
-            { name: 'Watched', path: '/watched' } // Yeni İzlenenler linki
+            { name: 'Watchlist', path: '/watchlist' }, 
+            { name: 'Watched', path: '/watched' } 
         ]
     }
 ];

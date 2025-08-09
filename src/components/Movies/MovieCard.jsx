@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image'; 
 import ProgressCircle from "../../baseUI/progress-circle";
 import Ellipsis from "../../baseUI/ellipsis";
-import { FaStar, FaRegStar, FaPlusCircle, FaCheckCircle, FaShareAlt, FaMinusCircle, FaEye, FaEyeSlash } from 'react-icons/fa'; // Yeni ikonlar eklendi
+import { FaStar, FaRegStar, FaPlusCircle, FaCheckCircle, FaShareAlt, FaMinusCircle, FaEye, FaEyeSlash } from 'react-icons/fa'; 
 import toast from 'react-hot-toast'; 
 
 const MovieCard = ({ item, isFavorite, onToggleFavorite, onCardClick }) => { 
@@ -56,10 +56,10 @@ const MovieCard = ({ item, isFavorite, onToggleFavorite, onCardClick }) => {
             let watchlist = JSON.parse(localStorage.getItem('watchlist') || '[]');
             if (isAddedToWatchlist) {
                 watchlist = watchlist.filter(wItem => !(wItem.id === id && wItem.media_type === media_type));
-                toast.success(`${title || name} izleme listesinden kaldırıldı.`);
+                toast.success(`${title || name} removed from watchlist.`);
             } else {
                 watchlist.push(item); 
-                toast.success(`${title || name} izleme listesine eklendi!`);
+                toast.success(`${title || name} added to watchlist.`);
             }
             localStorage.setItem('watchlist', JSON.stringify(watchlist)); 
             setIsAddedToWatchlist(!isAddedToWatchlist); 
@@ -67,20 +67,20 @@ const MovieCard = ({ item, isFavorite, onToggleFavorite, onCardClick }) => {
             let watchedList = JSON.parse(localStorage.getItem('watchedList') || '[]');
             if (isWatched) {
                 watchedList = watchedList.filter(wItem => !(wItem.id === id && wItem.media_type === media_type));
-                toast.success(`${title || name} izlenmedi olarak işaretlendi.`);
+                toast.success(`${title || name} marked as not watched.`);
             } else {
                 watchedList.push(item); 
-                toast.success(`${title || name} izlendi olarak işaretlendi!`);
+                toast.success(`${title || name} marked as watched.`);
             }
             localStorage.setItem('watchedList', JSON.stringify(watchedList)); 
             setIsWatched(!isWatched); 
         } else if (option === 'Share') {
             const itemUrl = `${window.location.origin}/${media_type}/${id}`;
             navigator.clipboard.writeText(itemUrl)
-                .then(() => toast.success(`Bağlantı panoya kopyalandı: ${itemUrl}`))
+                .then(() => toast.success(`Link copied to clipboard: ${itemUrl}`))
                 .catch(err => {
-                    console.error('Bağlantı kopyalanamadı: ', err);
-                    toast.error('Bağlantı kopyalanamadı.');
+                    console.error('Could not copy link: ', err);
+                    toast.error('Could not copy link:');
                 });
         }
     };
@@ -113,7 +113,7 @@ const MovieCard = ({ item, isFavorite, onToggleFavorite, onCardClick }) => {
                 {showPopover && (
                     <div 
                         ref={popoverRef} 
-                        className="absolute top-10 right-0 bg-white text-gray-800 rounded-md shadow-lg z-20 w-48 py-2" // z-index artırıldı
+                        className="absolute top-10 right-0 bg-white text-gray-800 rounded-md shadow-lg z-20 w-48 py-2" 
                         onClick={(e) => e.stopPropagation()} 
                     >
                         <div 
@@ -125,7 +125,7 @@ const MovieCard = ({ item, isFavorite, onToggleFavorite, onCardClick }) => {
                             ) : (
                                 <FaPlusCircle className="mr-2 text-tmdbLightBlue" /> 
                             )}
-                            {isAddedToWatchlist ? 'İzleme Listesinden Kaldır' : 'İzleme Listesine Ekle'}
+                            {isAddedToWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist'}
                         </div>
                         <div 
                             className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer"
@@ -136,13 +136,13 @@ const MovieCard = ({ item, isFavorite, onToggleFavorite, onCardClick }) => {
                             ) : (
                                 <FaEye className="mr-2 text-tmdbLightGreen" /> 
                             )}
-                            {isWatched ? 'İzlenmedi Olarak İşaretle' : 'İzlendi Olarak İşaretle'}
+                            {isWatched ? 'Mark as Not Watched' : 'Mark as Watched'}
                         </div>
                         <div 
                             className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer"
                             onClick={(e) => handleOptionClick(e, 'Share')}
                         >
-                            <FaShareAlt className="mr-2 text-gray-500" /> Paylaş
+                            <FaShareAlt className="mr-2 text-gray-500" /> Share
                         </div>
                     </div>
                 )}

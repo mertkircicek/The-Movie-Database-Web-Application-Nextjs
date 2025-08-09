@@ -5,8 +5,6 @@ import Container from '../../Layouts/Container';
 import MovieCard from '../Movies/MovieCard';
 import { useFavorites } from '../../context/FavoritesContext';
 import { MoonLoader } from 'react-spinners';
-import { MdOutlineFilterList, MdArrowDropDown } from 'react-icons/md';
-import { BsSortAlphaDown, BsSortNumericDown } from 'react-icons/bs';
 
 const MediaListPage = ({ mediaType, categoryTitle }) => {
     const [mediaItems, setMediaItems] = useState([]);
@@ -17,7 +15,6 @@ const MediaListPage = ({ mediaType, categoryTitle }) => {
     const { toggleFavorite, isFavorite } = useFavorites();
     const router = useRouter();
 
-    // Filtreleme seçeneklerinin geçici state'leri
     const [sortBy, setSortBy] = useState('popularity.desc');
     const [genres, setGenres] = useState([]);
     const [selectedGenres, setSelectedGenres] = useState([]);
@@ -29,7 +26,6 @@ const MediaListPage = ({ mediaType, categoryTitle }) => {
     const [watchProviders, setWatchProviders] = useState([]);
     const [selectedProviderId, setSelectedProviderId] = useState('');
 
-    // Uygulanmış filtreleri tutan state. API çağrısı bu state değiştiğinde tetiklenecek.
     const [appliedFilters, setAppliedFilters] = useState({
         sortBy: 'popularity.desc',
         selectedGenres: [],
@@ -40,7 +36,6 @@ const MediaListPage = ({ mediaType, categoryTitle }) => {
 
     const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
 
-    // Fetch supported regions on component mount
     useEffect(() => {
         const fetchRegions = async () => {
             try {
@@ -56,7 +51,6 @@ const MediaListPage = ({ mediaType, categoryTitle }) => {
         fetchRegions();
     }, []);
 
-    // Fetch genres from the TMDB API
     useEffect(() => {
         const fetchGenres = async () => {
             if (!mediaType) return;
@@ -70,7 +64,6 @@ const MediaListPage = ({ mediaType, categoryTitle }) => {
         fetchGenres();
     }, [mediaType]);
 
-    // Fetch "Where to Watch" providers for the selected region
     useEffect(() => {
         const fetchWatchProviders = async () => {
             if (!mediaType || (mediaType !== 'movie' && mediaType !== 'tv') || !selectedRegion) {
@@ -94,7 +87,6 @@ const MediaListPage = ({ mediaType, categoryTitle }) => {
         fetchWatchProviders();
     }, [mediaType, selectedRegion]);
 
-    // Function to fetch media items based on applied filters
     useEffect(() => {
         if (!router.isReady || !mediaType) {
             return;
@@ -107,16 +99,15 @@ const MediaListPage = ({ mediaType, categoryTitle }) => {
                 const params = {
                     language: 'en-US',
                     page: currentPage,
-                    sort_by: appliedFilters.sortBy, // Uygulanmış filtreyi kullan
-                    watch_region: appliedFilters.selectedRegion // Uygulanmış filtreyi kullan
+                    sort_by: appliedFilters.sortBy, 
+                    watch_region: appliedFilters.selectedRegion 
                 };
 
                 if (appliedFilters.selectedGenres.length > 0) {
-                    params.with_genres = appliedFilters.selectedGenres.join(','); // Uygulanmış filtreyi kullan
+                    params.with_genres = appliedFilters.selectedGenres.join(','); 
                 }
 
-                // Yıl filtresi: Sadece boş değilse veya 4 haneliyse API parametrelerine ekle
-                if (appliedFilters.releaseYear && appliedFilters.releaseYear.length === 4) { // Uygulanmış filtreyi kullan
+                if (appliedFilters.releaseYear && appliedFilters.releaseYear.length === 4) { 
                     if (mediaType === 'movie') {
                         params.primary_release_year = appliedFilters.releaseYear;
                     } else if (mediaType === 'tv') {
@@ -125,7 +116,7 @@ const MediaListPage = ({ mediaType, categoryTitle }) => {
                 }
                 
                 if (appliedFilters.selectedProviderId) {
-                    params.with_watch_providers = appliedFilters.selectedProviderId; // Uygulanmış filtreyi kullan
+                    params.with_watch_providers = appliedFilters.selectedProviderId; 
                 }
                 
                 console.log("Fetching media with params:", params);
@@ -146,9 +137,8 @@ const MediaListPage = ({ mediaType, categoryTitle }) => {
         };
 
         fetchMedia();
-    }, [router.isReady, mediaType, categoryTitle, currentPage, appliedFilters]); // Bağımlılık olarak sadece appliedFilters kullanıldı
+    }, [router.isReady, mediaType, categoryTitle, currentPage, appliedFilters]); 
 
-    // Filtreleri uygulamak için yeni fonksiyon
     const handleApplyFilters = () => {
         setAppliedFilters({
             sortBy,
@@ -157,17 +147,15 @@ const MediaListPage = ({ mediaType, categoryTitle }) => {
             selectedProviderId,
             selectedRegion
         });
-        setCurrentPage(1); // Filtreler uygulandığında sayfayı sıfırla
+        setCurrentPage(1); 
     };
 
-    // Tüm filtreleri sıfırlamak için yeni fonksiyon
     const handleClearFilters = () => {
         setSortBy('popularity.desc');
         setSelectedGenres([]);
         setReleaseYear('');
         setSelectedProviderId('');
-        setSelectedRegion('TR'); // Varsayılan bölgeye geri dön
-        // Filtreleri sıfırladıktan sonra uygula butonuna basmış gibi davran
+        setSelectedRegion('TR'); 
         setAppliedFilters({
             sortBy: 'popularity.desc',
             selectedGenres: [],
@@ -178,34 +166,28 @@ const MediaListPage = ({ mediaType, categoryTitle }) => {
         setCurrentPage(1);
     };
 
-    // Olay yöneticileri - artık doğrudan API çağrısını tetiklemiyorlar
     const handleGenreChange = (genreId) => {
         setSelectedGenres(prev => 
             prev.includes(genreId) ? prev.filter(id => id !== genreId) : [...prev, genreId]
         );
-        // setCurrentPage(1) burada kaldırıldı
     };
 
     const handleSortChange = (e) => {
         setSortBy(e.target.value);
-        // setCurrentPage(1) burada kaldırıldı
     };
 
     const handleYearChange = (e) => {
         const year = e.target.value;
-        setReleaseYear(year); // Her zaman state'i güncelle
-        // setCurrentPage(1) burada kaldırıldı
+        setReleaseYear(year); 
     };
     
     const handleRegionChange = (e) => {
         setSelectedRegion(e.target.value);
-        setSelectedProviderId(''); // Bölge değişince sağlayıcıyı sıfırla
-        // setCurrentPage(1) burada kaldırıldı
+        setSelectedProviderId(''); 
     };
 
     const handleProviderChange = (e) => {
         setSelectedProviderId(e.target.value);
-        // setCurrentPage(1) burada kaldırıldı
     };
 
     const handleCardClick = (item) => {
@@ -261,7 +243,7 @@ const MediaListPage = ({ mediaType, categoryTitle }) => {
                             <h3 className="font-semibold text-lg mb-2 text-gray-700">Where to Watch</h3>
                             <select
                                 value={selectedProviderId}
-                                onChange={handleProviderChange} // handleProviderChange kullanıldı
+                                onChange={handleProviderChange} 
                                 className="w-full p-2 rounded-md bg-gray-100 text-gray-800 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-tmdbLightBlue"
                             >
                                 <option value="">All Providers</option>
@@ -328,7 +310,6 @@ const MediaListPage = ({ mediaType, categoryTitle }) => {
                             />
                         </div>
 
-                        {/* Filtreleri Uygula Butonu */}
                         <div className="mt-8 flex gap-4">
                             <button
                                 onClick={handleApplyFilters}

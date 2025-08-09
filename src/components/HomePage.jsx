@@ -11,7 +11,6 @@ const HomePage = () => {
     const [selectedCategory, setSelectedCategory] = useState("Streaming");
     const router = useRouter(); 
 
-    
     const categoryMap = {
         "Streaming": "moviePopular", 
         "On TV": "tvOnTheAir",      
@@ -34,7 +33,6 @@ const HomePage = () => {
     return (
         <>
             <SearchBar onSubmit={handleHomePageSearchSubmit} /> 
-
             <Container>
                 <div> 
                     <Banner />

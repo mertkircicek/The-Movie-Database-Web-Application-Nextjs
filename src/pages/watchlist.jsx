@@ -85,12 +85,12 @@ const WatchlistPage = () => {
     }
 
     return (
-        <div className="min-h-screen bg-tmdbDarkBlue text-white pt-16 pb-8">
+        <div className="min-h-screen bg-white text-black pt-16 pb-8">
             <div className="max-w-7xl mx-auto px-4">
                 <div className="flex items-center justify-between mb-8">
                     <button
                         onClick={() => router.back()}
-                        className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-700"
+                        className="flex items-center gap-2 text-black hover:text-white transition-colors p-2 rounded-full hover:bg-gray-700"
                     >
                         <FaArrowLeft />
                         <span className="hidden sm:inline">Back</span>
@@ -100,7 +100,7 @@ const WatchlistPage = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                    <div className="md:col-span-1 p-4 bg-gray-800 rounded-lg shadow-lg h-fit">
+                    <div className="md:col-span-1 p-4 bg-gray-600 rounded-lg shadow-lg h-fit">
                         <h2 className="text-2xl font-bold mb-4 text-white">Categories</h2>
                         <ul className="space-y-2">
                             {['All', 'movie', 'tv'].map(filter => ( 
