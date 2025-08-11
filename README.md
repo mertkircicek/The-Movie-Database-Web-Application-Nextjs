@@ -63,37 +63,38 @@ It allows users to discover movies and TV shows, explore popular content, search
 ## 📁 Project Structure
 
 tmdb-app/
-├── public/
+├── public/                   
 ├── src/
-│ ├── api/
-│ ├── baseUI/
-│ ├── components/
-│ │ ├── Banner/
-│ │ ├── MediaListPage/
-│ │ ├── Movies/
-│ │ └── SearchBar/
-│ ├── context/
-│ ├── Layouts/
-│ ├── pages/
-│ └── styles/
-├── Dockerfile
-├── docker-compose.yml
-├── next.config.js
-├── tailwind.config.js
-└── package.json
+│   ├── api/                   
+│   ├── baseUI/                
+│   ├── components/            
+│   │   ├── Banner/           
+│   │   ├── SearchBar/        
+│   │   ├── Movies/            
+│   │   └── MediaListPage/     
+│   ├── context/               
+│   ├── Layouts/               
+│   ├── pages/               
+│   └── styles/               
+├── Dockerfile                 
+├── docker-compose.yml         
+├── next.config.js            
+├── tailwind.config.js         
+└── package.json               
+    
 
----
 
-## 🐳 Setup & Running
+🐳 Setup & Running
 
-### **Option 1: Using Docker (Recommended)**
+Option 1: Using Docker (Recommended)
 
-1️⃣ **Clone the Repository**
-```bash
+1️⃣ Clone the Repository
+
 git clone <your_project_repo_address>
 cd tmdb-app
 
 2️⃣ Configure Environment Variables
+
 Get an API key from TMDB Developer Website and create .env.local:
 
 NEXT_PUBLIC_TMDB_API_KEY=your_tmdb_api_key_here
@@ -101,10 +102,9 @@ NEXT_PUBLIC_TMDB_API_KEY=your_tmdb_api_key_here
 3️⃣ Build and Run with Docker
 
 docker-compose up --build
-# Or run in detached mode
-docker-compose up -d --build
 
 4️⃣ Access the App
+
 Open: http://localhost:3000
 
 🔧 Docker Management Commands
@@ -117,6 +117,7 @@ docker-compose logs -f    # View logs
 docker-compose build --no-cache && docker-compose up  # Clean rebuild
 
 Option 2: Local Development
+
 1️⃣ Clone the Repository
 
 git clone <your_project_repo_address>
@@ -133,9 +134,11 @@ NEXT_PUBLIC_TMDB_API_KEY=your_tmdb_api_key_here
 4️⃣ Start Development Server
 
 npm run dev
+
 📍 Access at: http://localhost:3000
 
 🚢 Deployment
+
 Multi-stage Docker build for optimized production images
 
 Configure production .env variables for API keys
